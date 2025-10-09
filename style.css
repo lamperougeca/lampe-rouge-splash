@@ -1,3 +1,6 @@
+/* Import de la police Raleway Regular */
+@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@400&display=swap');
+
 /* CSS Reset */
 * {
     margin: 0;
@@ -5,10 +8,10 @@
     box-sizing: border-box; 
 }
 
-/* Applique le fond partout et de manière fiable */
+/* Fond général avec dégradé circulaire bleu */
 html, body { 
-    background-color: #8895c0; 
     height: 100%; 
+    background: radial-gradient(circle, #9fb4e0 0%, #384b84 100%);
 }
 
 body {
@@ -16,10 +19,10 @@ body {
     flex-direction: column; 
     align-items: center;
     min-height: 100vh;
-    font-family: 'Roboto', sans-serif; 
+    font-family: 'Raleway', sans-serif; 
 }
 
-/* Conteneur principal */
+/* Conteneur principal: centrer le logo et les liens */
 .container {
     text-align: center;
     padding: 20px;
@@ -31,45 +34,55 @@ body {
     justify-content: center; 
 }
 
-/* Styles du logo (40% pour les grands écrans) */
+/* Logo */
 .logo {
     display: block;     
-    margin: 0 auto 20px auto; 
+    margin: 0 auto 8px auto; /* très proche du texte */
     width: 40%;         
     height: auto;       
 }
 
-/* Styles des liens de contact empilés */
+/* Texte du bas (email + instagram) */
 .contact-links-center {
-    margin-top: 20px; 
-    font-size: 1.2em; 
+    margin-top: 4px; /* collé au logo */
+    font-size: 1.25em; /* plus grand */
+    font-weight: 400; /* regular */
+    line-height: 1.1; 
+    text-align: center;
+    letter-spacing: 0.3px;
 }
 
-.contact-links-center a { 
-    color: #FFFFFF; 
-    text-decoration: none; 
-    font-weight: 100; /* Poids très fin */
+/* Chaque ligne de texte */
+.contact-links-center a, 
+.contact-links-center p {
+    display: block;
+    color: #e8ebf9;
+    text-decoration: none;
+    font-weight: 400;
+    margin: 0;
+    padding: 0;
 }
 
 .contact-links-center a:hover {
     text-decoration: underline;
 }
 
-/* Footer Spacer */
+/* Espace en bas pour maintenir le centrage */
 .footer-spacer {
     height: 40px; 
     width: 100%;
 }
 
-/* NOUVEAU CHANGEMENT: Ajustements pour les petits écrans (téléphones) */
+/* Petits écrans */
 @media (max-width: 600px) {
     .logo {
-        width: 85%; /* AUGMENTÉ : Le logo prend 85% de la largeur de l'écran mobile */
-        max-width: none; /* RETIRÉ : Laisse le logo s'étirer */
-        margin-bottom: 15px;
+        width: 70%; 
+        max-width: 350px;
+        margin-bottom: 6px;
     }
     .contact-links-center {
-        font-size: 1em;
-        margin-top: 15px;
+        font-size: 1.1em;
+        margin-top: 3px;
+        line-height: 1.05;
     }
 }
