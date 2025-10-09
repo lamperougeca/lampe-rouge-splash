@@ -1,3 +1,6 @@
+/* Import de la police Raleway Regular */
+@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@400&display=swap');
+
 /* CSS Reset */
 * {
     margin: 0;
@@ -5,7 +8,7 @@
     box-sizing: border-box; 
 }
 
-/* Applique le fond partout et de manière fiable */
+/* Fond général avec dégradé circulaire bleu */
 html, body { 
     height: 100%; 
     background: radial-gradient(circle, #9fb4e0 0%, #384b84 100%);
@@ -16,44 +19,46 @@ body {
     flex-direction: column; 
     align-items: center;
     min-height: 100vh;
-    font-family: Arial, Helvetica, sans-serif; 
+    font-family: 'Raleway', sans-serif; 
 }
 
-/* Conteneur principal: Maintenant responsable de centrer le logo ET les liens */
+/* Conteneur principal: centrer le logo et les liens */
 .container {
     text-align: center;
     padding: 20px;
     margin: auto; 
     
-    /* Clés du centrage vertical */
     flex-grow: 1; 
     display: flex; 
     flex-direction: column; 
     justify-content: center; 
 }
 
-/* Styles du logo */
+/* Logo */
 .logo {
     display: block;     
-    margin: 0 auto 20px auto; /* Ajout d'une marge de 20px sous le logo */
+    margin: 0 auto 8px auto; /* très proche du texte */
     width: 40%;         
     height: auto;       
 }
 
-/* NOUVEAU STYLE: Liens de contact sous le logo */
+/* Texte du bas (email + instagram) */
 .contact-links-center {
-    /* Marge entre le logo et les liens (midway) */
-    margin-top: 20px; 
-    
-    /* Taille de police augmentée */
-    font-size: 1.2em; /* Rend le texte 20% plus grand que la base */
+    margin-top: 4px; /* collé au logo */
+    font-size: 1.25em; /* plus grand */
+    font-weight: 400; /* regular */
+    line-height: 1.1; 
+    text-align: center;
+    letter-spacing: 0.3px;
 }
 
+/* Chaque ligne de texte */
 .contact-links-center a, 
 .contact-links-center p {
-    color: #545967; 
-    text-decoration: none; 
-    font-weight: normal; 
+    display: block;
+    color: #e8ebf9;
+    text-decoration: none;
+    font-weight: 400;
     margin: 0;
     padding: 0;
 }
@@ -62,22 +67,22 @@ body {
     text-decoration: underline;
 }
 
-/* Footer Spacer - MAINTENIR le logo centré verticalement */
+/* Espace en bas pour maintenir le centrage */
 .footer-spacer {
-    /* Remplace l'espace qu'occupait l'ancien footer en bas pour maintenir le centrage vertical. */
     height: 40px; 
     width: 100%;
 }
 
-/* Ajustements pour les petits écrans (téléphones) */
+/* Petits écrans */
 @media (max-width: 600px) {
     .logo {
         width: 70%; 
         max-width: 350px;
-        margin-bottom: 15px;
+        margin-bottom: 6px;
     }
     .contact-links-center {
-        font-size: 1em;
-        margin-top: 15px;
+        font-size: 1.1em;
+        margin-top: 3px;
+        line-height: 1.05;
     }
 }
