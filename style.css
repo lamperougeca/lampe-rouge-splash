@@ -1,4 +1,4 @@
-/* CSS Reset: Assure que la marge et le padding sont à zéro pour TOUS les éléments */
+/* CSS Reset */
 * {
     margin: 0;
     padding: 0;
@@ -7,7 +7,7 @@
 
 /* Applique le fond partout et de manière fiable */
 html, body { 
-    background-color: #8895c0; /* Couleur de fond (Dusty Blue) */
+    background-color: #8895c0; 
     height: 100%; 
 }
 
@@ -16,55 +16,69 @@ body {
     flex-direction: column; 
     align-items: center;
     min-height: 100vh;
-    font-family: Arial, Helvetica, sans-serif; /* Nouvelle police plus fine */
+    font-family: Arial, Helvetica, sans-serif; 
 }
 
-/* Conteneur principal: Centré verticalement au milieu de l'espace restant */
+/* Conteneur principal: Maintenant responsable de centrer le logo ET les liens */
 .container {
     text-align: center;
     padding: 20px;
     margin: auto; 
     
     /* Clés du centrage vertical */
-    flex-grow: 1; /* Prend l'espace vertical disponible */
+    flex-grow: 1; 
     display: flex; 
     flex-direction: column; 
-    justify-content: center; /* Centre le contenu (le logo) verticalement */
+    justify-content: center; 
 }
 
 /* Styles du logo */
 .logo {
     display: block;     
-    margin: 0 auto;     
-    width: 40%;         /* Logo à 40% de la largeur de l'écran */
+    margin: 0 auto 20px auto; /* Ajout d'une marge de 20px sous le logo */
+    width: 40%;         
     height: auto;       
 }
 
-/* Footer et liens de contact */
-.contact-footer {
-    width: 100%;
-    text-align: center;
-    padding: 20px 0;
-    font-size: 0.9em;
+/* NOUVEAU STYLE: Liens de contact sous le logo */
+.contact-links-center {
+    /* Marge entre le logo et les liens (midway) */
+    margin-top: 20px; 
+    
+    /* Taille de police augmentée */
+    font-size: 1.2em; /* Rend le texte 20% plus grand que la base */
 }
 
-.contact-footer a, 
-.contact-footer p {
-    color: #545967; /* Couleur des liens/texte de contact (Gris foncé) */
+.contact-links-center a, 
+.contact-links-center p {
+    color: #545967; 
     text-decoration: none; 
-    font-weight: normal; /* Force le texte à ne pas être en gras */
+    font-weight: normal; 
     margin: 0;
     padding: 0;
 }
 
-.contact-footer a:hover {
+.contact-links-center a:hover {
     text-decoration: underline;
 }
+
+/* Footer Spacer - MAINTENIR le logo centré verticalement */
+.footer-spacer {
+    /* Remplace l'espace qu'occupait l'ancien footer en bas pour maintenir le centrage vertical. */
+    height: 40px; 
+    width: 100%;
+}
+
 
 /* Ajustements pour les petits écrans (téléphones) */
 @media (max-width: 600px) {
     .logo {
         width: 70%; 
         max-width: 350px;
+        margin-bottom: 15px;
+    }
+    .contact-links-center {
+        font-size: 1em;
+        margin-top: 15px;
     }
 }
