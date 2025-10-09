@@ -1,5 +1,5 @@
-/* Import de la police Raleway Regular */
-@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@400&display=swap');
+/* Import de la police Raleway Light (300) */
+@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@300&display=swap');
 
 /* CSS Reset */
 * {
@@ -46,7 +46,6 @@ body {
 .contact-links-center {
     margin-top: 4px; /* collé au logo */
     font-size: 1.25em; /* plus grand */
-    font-weight: 400; /* regular */
     line-height: 1.1; 
     text-align: center;
     letter-spacing: 0.3px;
@@ -58,7 +57,7 @@ body {
     display: block;
     color: #e8ebf9;
     text-decoration: none;
-    font-weight: 400;
+    font-weight: 300; /* Light */
     margin: 0;
     padding: 0;
 }
@@ -73,11 +72,11 @@ body {
     width: 100%;
 }
 
-/* Petits écrans */
+/* CHANGEMENT CLÉ: Ajustements pour les petits écrans (téléphones) */
 @media (max-width: 600px) {
     .logo {
-        width: 70%; 
-        max-width: 350px;
+        width: 85%; /* AUGMENTÉ: Le logo prend 85% de la largeur de l'écran mobile */
+        max-width: none; /* Retiré la limite de taille pour le laisser s'étendre */
         margin-bottom: 6px;
     }
     .contact-links-center {
