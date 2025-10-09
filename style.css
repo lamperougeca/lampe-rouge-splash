@@ -1,0 +1,70 @@
+/* CSS Reset: Assure que la marge et le padding sont à zéro pour TOUS les éléments */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box; 
+}
+
+/* Applique le fond partout et de manière fiable */
+html, body { 
+    background-color: #8895c0; /* Couleur de fond (Dusty Blue) */
+    height: 100%; 
+}
+
+body {
+    display: flex;
+    flex-direction: column; 
+    align-items: center;
+    min-height: 100vh;
+    font-family: Arial, Helvetica, sans-serif; /* Nouvelle police plus fine */
+}
+
+/* Conteneur principal: Centré verticalement au milieu de l'espace restant */
+.container {
+    text-align: center;
+    padding: 20px;
+    margin: auto; 
+    
+    /* Clés du centrage vertical */
+    flex-grow: 1; /* Prend l'espace vertical disponible */
+    display: flex; 
+    flex-direction: column; 
+    justify-content: center; /* Centre le contenu (le logo) verticalement */
+}
+
+/* Styles du logo */
+.logo {
+    display: block;     
+    margin: 0 auto;     
+    width: 40%;         /* Logo à 40% de la largeur de l'écran */
+    height: auto;       
+}
+
+/* Footer et liens de contact */
+.contact-footer {
+    width: 100%;
+    text-align: center;
+    padding: 20px 0;
+    font-size: 0.9em;
+}
+
+.contact-footer a, 
+.contact-footer p {
+    color: #545967; /* Couleur des liens/texte de contact (Gris foncé) */
+    text-decoration: none; 
+    font-weight: normal; /* Force le texte à ne pas être en gras */
+    margin: 0;
+    padding: 0;
+}
+
+.contact-footer a:hover {
+    text-decoration: underline;
+}
+
+/* Ajustements pour les petits écrans (téléphones) */
+@media (max-width: 600px) {
+    .logo {
+        width: 70%; 
+        max-width: 350px;
+    }
+}
