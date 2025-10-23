@@ -88,7 +88,7 @@
 
         /* --- New Hero Section (WebGL) --- */
         #home {
-            height: 100vh;
+            height: 100dvh; /* Changed from 100vh for better mobile support */
             background-color: var(--neon-red);
             display: flex;
             align-items: center;
@@ -136,6 +136,22 @@
         ::-webkit-scrollbar-thumb:hover {
             background: #ff4d7a; /* Lighter red on hover */
         }
+
+        /* --- Mobile Responsiveness --- */
+        @media (pointer: coarse) {
+            .cursor-dot,
+            .cursor-outline {
+                display: none; /* Hide custom cursor on touch devices */
+            }
+            
+            body {
+                cursor: auto; /* Restore default cursor */
+            }
+
+            a:hover, button:hover {
+                cursor: auto; /* Restore default cursor on links */
+            }
+        }
     </style>
 </head>
 <body>
@@ -149,7 +165,7 @@
              <h1 class="hero-text">Lampe Rouge</h1>
         </section>
 
-        <section id="flyer" class="py-20 flex justify-center items-center px-6">
+        <section id="flyer" class="py-12 md:py-20 flex justify-center items-center px-4 md:px-6">
              <img src="1000005045 (1080×1080).jpg" alt="Le Musée du Cartoon Flyer" class="max-w-xl w-full rounded-lg border-2 border-[var(--neon-red)] shadow-[0_0_20px_var(--neon-red),_0_0_40px_rgba(255,0,60,0.7)]">
         </section>
 
@@ -181,7 +197,10 @@
             requestAnimationFrame(animateCursor);
         }
         
-        requestAnimationFrame(animateCursor);
+        // Only run cursor animation if it's not a coarse pointer device
+        if (window.matchMedia("(pointer: fine)").matches) {
+            requestAnimationFrame(animateCursor);
+        }
 
 
         // --- WebGL Hero Animation ---
