@@ -4,21 +4,300 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lampe Rouge</title>
-    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --neon-red: #ff003c;
+            --bg-dark: #1a0000; /* Dark red for mystery */
+            --main-red-threejs: 1.0;
+            --main-green-threejs: 0.0;
+            --main-blue-threejs: 0.235;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: #f0f0f0;
+            font-family: 'Roboto', sans-serif;
+            overflow-x: hidden;
+            cursor: none;
+        }
+        
+        a:hover, button:hover {
+            cursor: none;
+        }
+
+        .font-orbitron {
+            font-family: 'Orbitron', sans-serif;
+        }
+        
+        /* --- Custom Cursor --- */
+        .cursor-dot {
+            width: 8px;
+            height: 8px;
+            background-color: var(--neon-red);
+            border-radius: 50%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            z-index: 9999;
+            box-shadow: 0 0 10px var(--neon-red), 0 0 20px var(--neon-red);
+        }
+
+        .cursor-outline {
+            width: 40px;
+            height: 40px;
+            border: 2px solid var(--neon-red);
+            border-radius: 50%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            z-index: 9998;
+            transition: all 0.1s ease-out;
+        }
+
+        /* --- Grid Background --- */
+        .main-container {
+            position: relative;
+            /* Reddish grid lines */
+            background-image:
+                linear-gradient(rgba(255, 0, 60, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 0, 60, 0.05) 1px, transparent 1px);
+            background-size: 25px 25px;
+        }
+
+        .main-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            /* Reddish radial glow */
+            background: radial-gradient(circle at 50% 0%, rgba(255, 0, 60, 0.2), transparent 40%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* --- New Hero Section (WebGL) --- */
+        #home {
+            height: 100vh;
+            background-color: var(--neon-red);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+        }
+        #webgl-canvas-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+        #webgl-canvas-container canvas {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+        .hero-text {
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 900;
+            font-size: clamp(2.5rem, 12vw, 15rem);
+            line-height: 1;
+            text-transform: uppercase;
+            color: var(--bg-dark); /* Black text on red background */
+            margin: 0;
+            position: relative;
+            z-index: 2;
+            pointer-events: none; /* Allow mouse to interact with canvas below */
+        }
+        
+        /* --- Scrollbar --- */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--bg-dark);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--neon-red); /* Red scrollbar */
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #ff4d7a; /* Lighter red on hover */
+        }
+    </style>
 </head>
 <body>
-    <div class="container">
-        <img src="LRlogo.png" alt="Lampe Rouge Logo" class="logo">
+    <div class="cursor-dot"></div>
+    <div class="cursor-outline"></div>
+
+    <div class="main-container min-h-screen">
         
-        <p class="contact-links-center">
-            <a href="mailto:info@lamperouge.ca">info@lamperouge.ca</a>
-        </p>
-        <p class="contact-links-center" style="margin-top: 5px;">
-            <a href="https://instagram.com/lamperougelab" target="_blank">instagram.com/lamperougelab</a>
-        </p>
+        <section id="home" class="h-screen flex items-center justify-center text-center overflow-hidden">
+             <div id="webgl-canvas-container"></div>
+             <h1 class="hero-text">Lampe Rouge</h1>
+        </section>
+
+        <section id="flyer" class="py-20 flex justify-center items-center px-6">
+             <img src="1000005045 (1080×1080).jpg" alt="Le Musée du Cartoon Flyer" class="max-w-xl w-full rounded-lg border-2 border-[var(--neon-red)] shadow-[0_0_20px_var(--neon-red),_0_0_40px_rgba(255,0,60,0.7)]">
+        </section>
+
     </div>
 
-    <div class="footer-spacer"></div>
+    <script>
+        // --- Custom Cursor ---
+        const cursorDot = document.querySelector('.cursor-dot');
+        const cursorOutline = document.querySelector('.cursor-outline');
+
+        let cursorX = 0, cursorY = 0;
+        let outlineX = 0, outlineY = 0;
+
+        window.addEventListener('mousemove', (e) => {
+            cursorX = e.clientX;
+            cursorY = e.clientY;
+            
+            cursorDot.style.left = `${cursorX}px`;
+            cursorDot.style.top = `${cursorY}px`;
+        });
+        
+        const animateCursor = () => {
+            outlineX += (cursorX - outlineX) * 0.1;
+            outlineY += (cursorY - outlineY) * 0.1;
+
+            cursorOutline.style.left = `${outlineX}px`;
+            cursorOutline.style.top = `${outlineY}px`;
+            
+            requestAnimationFrame(animateCursor);
+        }
+        
+        requestAnimationFrame(animateCursor);
+
+
+        // --- WebGL Hero Animation ---
+        let scene, camera, renderer, material;
+        let mouse = new THREE.Vector2(0.5, 0.5);
+        let targetMouse = new THREE.Vector2(0.5, 0.5);
+
+        const canvasContainer = document.getElementById('webgl-canvas-container');
+
+        // Vertex Shader
+        const vertexShader = `
+            varying vec2 vUv;
+            void main() {
+                vUv = uv;
+                gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+            }
+        `;
+
+        // Fragment Shader (recreating the effect)
+        const fragmentShader = `
+            varying vec2 vUv;
+            uniform vec2 uResolution;
+            uniform float uTime;
+            uniform vec2 uMouse;
+
+            float line(vec2 uv, float thickness) {
+                return smoothstep(thickness, thickness + 0.005, abs(uv.y));
+            }
+
+            void main() {
+                vec2 st = gl_FragCoord.xy / uResolution.xy;
+                st.x *= uResolution.x / uResolution.y;
+
+                vec2 mouse = uMouse;
+                mouse.x *= uResolution.x / uResolution.y;
+
+                float dist = distance(st, mouse);
+                float strength = smoothstep(0.5, 0.0, dist);
+
+                vec2 uv = vUv;
+                uv.x += (sin(uv.y * 20.0 + uTime * 2.0) * 0.1) * (1.0 - strength);
+                uv.x += strength * (mouse.x - st.x) * 0.5; // Mouse distortion
+                uv.y += strength * (mouse.y - st.y) * 0.5;
+
+                float numLines = 40.0;
+                float lineIntensity = 1.0 - line(vec2(uv.x, (fract(uv.y * numLines) - 0.5) * 2.0), 0.8);
+                
+                // Color is black (0.0)
+                vec3 color = vec3(0.0) * lineIntensity;
+                
+                // The background is the red from the CSS, so we just output black lines or transparent
+                gl_FragColor = vec4(color, lineIntensity);
+            }
+        `;
+
+        function initWebGL() {
+            scene = new THREE.Scene();
+            camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0.1, 10);
+            renderer = new THREE.WebGLRenderer({ alpha: true }); // Alpha true for transparent background
+            
+            renderer.setSize(canvasContainer.clientWidth, canvasContainer.clientHeight);
+            canvasContainer.appendChild(renderer.domElement);
+
+            const geometry = new THREE.PlaneBufferGeometry(2, 2);
+            
+            material = new THREE.ShaderMaterial({
+                uniforms: {
+                    uTime: { value: 0.0 },
+                    uResolution: { value: new THREE.Vector2(canvasContainer.clientWidth, canvasContainer.clientHeight) },
+                    uMouse: { value: mouse }
+                },
+                vertexShader,
+                fragmentShader,
+                transparent: true
+            });
+
+            const mesh = new THREE.Mesh(geometry, material);
+            scene.add(mesh);
+
+            camera.position.z = 1;
+
+            animateWebGL();
+        }
+
+        function animateWebGL() {
+            requestAnimationFrame(animateWebGL);
+            
+            // Lerp mouse for smooth transition
+            mouse.x += (targetMouse.x - mouse.x) * 0.05;
+            mouse.y += (targetMouse.y - mouse.y) * 0.05;
+            
+            material.uniforms.uTime.value += 0.01;
+            material.uniforms.uMouse.value = mouse;
+
+            renderer.render(scene, camera);
+        }
+
+        function onWindowResize() {
+            const w = canvasContainer.clientWidth;
+            const h = canvasContainer.clientHeight;
+            
+            renderer.setSize(w, h);
+            material.uniforms.uResolution.value.set(w, h);
+        }
+        
+        function onMouseMove(event) {
+            targetMouse.x = event.clientX / window.innerWidth;
+            targetMouse.y = 1.0 - (event.clientY / window.innerHeight);
+        }
+
+        window.addEventListener('resize', onWindowResize, false);
+        window.addEventListener('mousemove', onMouseMove, false);
+
+        initWebGL();
+
+    </script>
 
 </body>
 </html>
